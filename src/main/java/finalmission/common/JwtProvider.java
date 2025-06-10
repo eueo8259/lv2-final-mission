@@ -1,7 +1,7 @@
 package finalmission.common;
 
 import finalmission.entity.Customer;
-import finalmission.exception.UnauthorizedException;
+import finalmission.common.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

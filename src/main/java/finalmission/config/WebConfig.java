@@ -1,4 +1,4 @@
-package finalmission.common.config;
+package finalmission.config;
 
 import finalmission.common.LoginCustomerResolver;
 import finalmission.service.AuthService;

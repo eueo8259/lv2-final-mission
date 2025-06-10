@@ -1,4 +1,4 @@
-package finalmission.exception;
+package finalmission.common.exception;
 
 import org.springframework.http.HttpStatus;
 

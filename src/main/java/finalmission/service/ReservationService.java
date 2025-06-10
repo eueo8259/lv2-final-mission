@@ -4,7 +4,7 @@ import finalmission.dto.reservation.ReservationRequest;
 import finalmission.dto.reservation.ReservationResponse;
 import finalmission.entity.Customer;
 import finalmission.entity.Reservation;
-import finalmission.exception.NotFountException;
+import finalmission.common.exception.NotFountException;
 import finalmission.repository.CustomerRepository;
 import finalmission.repository.ReservationRepository;
 import java.util.List;

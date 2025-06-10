@@ -2,7 +2,7 @@ package finalmission.common;
 
 import finalmission.common.annotation.LoginCustomerId;
 import finalmission.dto.login.LoginInfo;
-import finalmission.exception.NotFountException;
+import finalmission.common.exception.NotFountException;
 import finalmission.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

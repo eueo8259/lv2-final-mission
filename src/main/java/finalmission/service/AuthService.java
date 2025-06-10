@@ -3,7 +3,7 @@ package finalmission.service;
 import finalmission.common.JwtProvider;
 import finalmission.dto.login.LoginInfo;
 import finalmission.dto.login.LoginRequest;
-import finalmission.exception.UnauthorizedException;
+import finalmission.common.exception.UnauthorizedException;
 import finalmission.repository.CustomerRepository;
 import java.util.Optional;
 import lombok.AllArgsConstructor;

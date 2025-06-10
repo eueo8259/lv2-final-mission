@@ -24,12 +24,12 @@ public class ReservationController {
     public ReservationResponse create(
             @LoginCustomerId LoginInfo info,
             @RequestBody ReservationRequest request
-            ) {
+    ) {
         return reservationService.saveReservation(request, info.id());
     }
 
-    @GetMapping("id")
-    public List<ReservationResponse> getAll(@PathVariable("id") Long id) {
-        return reservationService.findByCustomerId(id);
+    @GetMapping("mine")
+    public List<ReservationResponse> getAll(@LoginCustomerId LoginInfo info) {
+        return reservationService.findByCustomerId(info.id());
     }
 }
