@@ -5,29 +5,36 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Customer {
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(unique = true, nullable = false)
-    String email;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    Customer customer;
 
     @Column(nullable = false)
-    String name;
+    LocalDate date;
 
-    public Customer (String email, String name){
-        this.email = email;
-        this.name = name;
+    @Column(nullable = false)
+    LocalTime time;
+
+    public Reservation(Customer customer, LocalDate date, LocalTime time) {
+        this.customer = customer;
+        this.date = date;
+        this.time = time;
     }
 }
