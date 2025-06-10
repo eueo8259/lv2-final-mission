@@ -1,6 +1,6 @@
 package finalmission.service;
 
-import finalmission.common.JwtProvider;
+import finalmission.common.ui.JwtProvider;
 import finalmission.dto.login.LoginInfo;
 import finalmission.dto.login.LoginRequest;
 import finalmission.common.exception.UnauthorizedException;

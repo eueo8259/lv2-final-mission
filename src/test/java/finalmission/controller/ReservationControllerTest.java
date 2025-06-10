@@ -2,7 +2,7 @@ package finalmission.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import finalmission.common.JwtProvider;
+import finalmission.common.ui.JwtProvider;
 import finalmission.entity.Customer;
 import finalmission.entity.Reservation;
 import finalmission.repository.CustomerRepository;

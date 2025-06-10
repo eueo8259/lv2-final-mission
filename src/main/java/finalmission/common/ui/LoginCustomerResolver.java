@@ -1,4 +1,4 @@
-package finalmission.common;
+package finalmission.common.ui;
 
 import finalmission.common.annotation.LoginCustomerId;
 import finalmission.dto.login.LoginInfo;

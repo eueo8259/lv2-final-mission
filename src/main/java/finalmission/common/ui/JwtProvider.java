@@ -1,4 +1,4 @@
-package finalmission.common;
+package finalmission.common.ui;
 
 import finalmission.entity.Customer;
 import finalmission.common.exception.UnauthorizedException;

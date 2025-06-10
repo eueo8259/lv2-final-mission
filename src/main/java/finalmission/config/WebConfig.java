@@ -1,6 +1,6 @@
 package finalmission.config;
 
-import finalmission.common.LoginCustomerResolver;
+import finalmission.common.ui.LoginCustomerResolver;
 import finalmission.service.AuthService;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
