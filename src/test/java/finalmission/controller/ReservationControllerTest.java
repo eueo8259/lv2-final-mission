@@ -4,12 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import finalmission.common.JwtProvider;
 import finalmission.entity.Customer;
+import finalmission.entity.Reservation;
 import finalmission.repository.CustomerRepository;
+import finalmission.repository.ReservationRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -25,6 +28,10 @@ public class ReservationControllerTest {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     Customer customer = new Customer("user@email.com", "사용자");
 
     @DisplayName("로그인한 유저의 정보를 찾을 수 없다면 예약을 생성할 때 404에러를 반환한다")
@@ -67,7 +74,7 @@ public class ReservationControllerTest {
                 .contentType(ContentType.JSON)
                 .cookie("token", userToken)
                 .body(params)
-                .when().get("/reservations")
+                .when().post("/reservations")
                 .then().log().all()
                 .statusCode(200);
     }
@@ -105,5 +112,58 @@ public class ReservationControllerTest {
         // then
         List<?> reservations = extract.body().as(List.class);
         assertThat(reservations).hasSize(1);
+    }
+
+    @DisplayName("로그인한 사용자의 예약 삭제")
+    @Test
+    void 로그인한_사용자의_예약_삭제_테스트() {
+        // given
+        Map<String, String> params = new HashMap<>();
+        params.put("date", String.valueOf(LocalDate.now().plusDays(1)));
+        params.put("time", "16:00");
+        Customer saveCustomer = customerRepository.save(customer);
+
+        JwtProvider jwtProvider = new JwtProvider();
+        String userToken = jwtProvider.createToken(saveCustomer);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", userToken)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(200);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", userToken)
+                .when().delete("/reservations/1")
+                .then().log().all()
+                .statusCode(200);
+    }
+
+    @DisplayName("사용자 본인의 예약 삭제의 경우 400을 던진다")
+    @Test
+    void 로그인한_사용자의_예약_삭제_실패_테스트() {
+        // given
+        Map<String, String> params = new HashMap<>();
+        params.put("date", String.valueOf(LocalDate.now().plusDays(1)));
+        params.put("time", "16:00");
+        Customer firstCustomer = customerRepository.save(customer);
+        Customer secondCustomer = customerRepository.save(new Customer("aaa@naver.com", "sosos"));
+
+        reservationRepository.save(new Reservation(secondCustomer, LocalDate.now(), LocalTime.now()));
+
+        JwtProvider jwtProvider = new JwtProvider();
+        String userToken = jwtProvider.createToken(firstCustomer);
+
+
+        //when & then
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", userToken)
+                .when().delete("/reservations/1")
+                .then().log().all()
+                .statusCode(400);
     }
 }

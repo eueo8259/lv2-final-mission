@@ -7,6 +7,7 @@ import finalmission.dto.reservation.ReservationResponse;
 import finalmission.service.ReservationService;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +32,11 @@ public class ReservationController {
     @GetMapping("mine")
     public List<ReservationResponse> getAll(@LoginCustomerId LoginInfo info) {
         return reservationService.findByCustomerId(info.id());
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable("id") Long id,
+                       @LoginCustomerId LoginInfo info){
+        reservationService.deleteReservation(id, info.id());
     }
 }
