@@ -1,5 +1,7 @@
 package finalmission.service;
 
+import finalmission.common.cache.MonthlyHolidayCache;
+import finalmission.common.exception.HolidayException;
 import finalmission.common.exception.IncorrectInfo;
 import finalmission.dto.reservation.ReservationRequest;
 import finalmission.dto.reservation.ReservationResponse;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class ReservationService {
+    private final MonthlyHolidayCache cache;
     private final ReservationRepository reservationRepository;
     private final CustomerRepository customerRepository;
 
@@ -31,6 +34,9 @@ public class ReservationService {
 
     @Transactional
     public ReservationResponse saveReservation(ReservationRequest request, Long id) {
+        if (cache.getCachedHolidays().contains(request.date())){
+            throw new HolidayException("공휴일에는 예약이 불가능합니다.");
+        }
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {
             throw new NotFountException("존재 하지 않는 고객입니다.");

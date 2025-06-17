@@ -2,6 +2,7 @@ package finalmission.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import finalmission.common.cache.MonthlyHolidayCache;
 import finalmission.common.ui.JwtProvider;
 import finalmission.entity.Customer;
 import finalmission.entity.Reservation;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,15 @@ public class ReservationControllerTest {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private MonthlyHolidayCache cache;
+
+    @BeforeEach
+    void setUp() {
+        cache.refreshIfMonthChanged();
+    }
+
 
     Customer customer = new Customer("user@email.com", "사용자");
 
@@ -78,6 +89,29 @@ public class ReservationControllerTest {
                 .then().log().all()
                 .statusCode(200);
     }
+
+    @DisplayName("로그인한 유저가 공휴일에 예약을 생성할 때 400을 반환한다")
+    @Test
+    void 로그인한_사용자의_공휴일_예약_실패_테스트() {
+        // given
+        Map<String, String> params = new HashMap<>();
+        params.put("date", String.valueOf(cache.getCachedHolidays().getFirst()));
+        params.put("time", "16:00");
+        Customer saveCustomer = customerRepository.save(customer);
+
+        JwtProvider jwtProvider = new JwtProvider();
+        String userToken = jwtProvider.createToken(saveCustomer);
+
+        // when & then
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", userToken)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(400);
+    }
+
 
     @DisplayName("로그인한 사용자의 전체 예약 조회")
     @Test
@@ -156,7 +190,6 @@ public class ReservationControllerTest {
 
         JwtProvider jwtProvider = new JwtProvider();
         String userToken = jwtProvider.createToken(firstCustomer);
-
 
         //when & then
         RestAssured.given().log().all()
