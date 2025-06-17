@@ -20,18 +20,12 @@ public class MonthlyHolidayCache {
         this.holidayClient = holidayClient;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
-    public void refreshIfMonthChanged() {
-        YearMonth now = YearMonth.now();
-        YearMonth previous = lastUpdatedMonth.get();
-
-        if (!now.equals(previous)) {
-            String month = String.format("%02d", now.getMonthValue());
-            List<LocalDate> holidays = holidayClient.getHolidays(now.getYear(), month);
-
-            cachedHolidays.set(holidays);
-            lastUpdatedMonth.set(now);
-        }
+    @Scheduled(cron = "0 0 0 1 * *")
+    public void refreshMonthlyHolidays() {
+        String month = String.format("%02d", YearMonth.now().getMonthValue());
+        List<LocalDate> holidays = holidayClient.getHolidays(YearMonth.now().getYear(), month);
+        cachedHolidays.set(holidays);
+        lastUpdatedMonth.set(YearMonth.now());
     }
 
     public List<LocalDate> getCachedHolidays() {

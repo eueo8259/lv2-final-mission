@@ -39,7 +39,7 @@ public class ReservationControllerTest {
 
     @BeforeEach
     void setUp() {
-        cache.refreshIfMonthChanged();
+        cache.refreshMonthlyHolidays();
     }
 
 
