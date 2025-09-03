@@ -11,6 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CustomerControllerTest {
+
     @Test
     void 회원가입_테스트(){
         Map<String, String> params = new HashMap<>();
