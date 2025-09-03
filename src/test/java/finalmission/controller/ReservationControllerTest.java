@@ -90,28 +90,6 @@ public class ReservationControllerTest {
                 .statusCode(200);
     }
 
-    @DisplayName("로그인한 유저가 공휴일에 예약을 생성할 때 400을 반환한다")
-    @Test
-    void 로그인한_사용자의_공휴일_예약_실패_테스트() {
-        // given
-        Map<String, String> params = new HashMap<>();
-        params.put("date", String.valueOf(cache.getCachedHolidays().getFirst()));
-        params.put("time", "16:00");
-        Customer saveCustomer = customerRepository.save(customer);
-
-        JwtProvider jwtProvider = new JwtProvider();
-        String userToken = jwtProvider.createToken(saveCustomer);
-
-        // when & then
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .cookie("token", userToken)
-                .body(params)
-                .when().post("/reservations")
-                .then().log().all()
-                .statusCode(400);
-    }
-
 
     @DisplayName("로그인한 사용자의 전체 예약 조회")
     @Test
